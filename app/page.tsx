@@ -103,7 +103,7 @@ export default function LandingPage() {
 
           {/* Main Content Column */}
           <motion.div
-            className="flex flex-col justify-center order-1 lg:order-none lg:col-start-3 lg:col-span-1 text-center lg:text-right"
+            className="flex flex-col justify-center pr-10 order-1 lg:order-none  lg:col-start-3 lg:col-span-1 text-center lg:text-right"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
