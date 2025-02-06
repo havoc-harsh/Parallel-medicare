@@ -48,7 +48,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
       <div className="p-4 border-b border-gray-300 flex items-center gap-3">
         <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-teal-400 rounded-full" />
         {!isCollapsed && (
-          <span className="text-xl font-bold text-gray-900">medicare</span>
+          <span className="text-xl font-bold text-gray-900">MediCare+</span>
         )}
       </div>
 
@@ -85,14 +85,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
             {!isCollapsed && "Settings"}
           </button>
 
-          <button
+          <Link href={'/hospital'}
             className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
               isCollapsed ? "justify-center" : ""
             }`}
           >
             <Hospital className="w-5 h-5 text-blue-600" />
             {!isCollapsed && "Hospitals"}
-          </button>
+          </Link>
 
           {/* Services Section */}
           <div className="border-t border-gray-300 mt-3 pt-3">

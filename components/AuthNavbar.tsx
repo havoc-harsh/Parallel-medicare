@@ -14,7 +14,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { name: 'Home', href: '/' },
+    { name: 'Home', href: '/patient/dashboard' },
     { 
       name: 'Features', 
       href: '#features',
@@ -130,9 +130,9 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/*
-          Uncomment below if you want the "Get Started" options.
-          <div className="flex items-center gap-4 ml-6" ref={dropdownRef}>
+          
+          {/* Uncomment below if you want the "Get Started" options. */}
+          {/* <div className="flex items-center gap-4 ml-6" ref={dropdownRef}>
             <div className="relative">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -174,8 +174,8 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
-          */}
+          </div> */}
+         
         </div>
 
         {/* Mobile Menu Button */}
