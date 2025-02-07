@@ -12,6 +12,9 @@ export interface Hospital {
   rating: string;
   experience?: string;
   waitTime: string;
+  
+  latitude: number;
+  longitude: number;
   specialities: string[];
   about?: string;
   nextAvailable?: string;
@@ -19,7 +22,6 @@ export interface Hospital {
   amenities?: string[];
   doctors: Doctor[]; // Updated to use the Doctor interface
 }
-
 export interface BookingData {
   date: string;
   time: string;

@@ -2,25 +2,38 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import HospitalCard from "@/components/hospital-card";
-import MapView from "@/components/map-view";
 import { Input } from "@/components/ui/input";
 import AuthNavbar from "@/components/AuthNavbar";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, MapPin, List } from "lucide-react";
-import { hospitals } from "@/data/hospital";
+import { Search, X, MapPin, List } from "lucide-react";
+import { hospitals as allHospitals } from "@/data/hospital";
+
+// Dynamically import MapView with SSR disabled
+const MapView = dynamic(
+  () => import("@/components/map-view"),
+  { 
+    ssr: false,
+    loading: () => <div className="h-[calc(100vh-180px)] flex items-center justify-center">Loading map...</div>
+  }
+);
 
 export default function HospitalPage() {
   const [mapMode, setMapMode] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Added search state
+
+  // ✅ Function to filter hospitals based on search query
+  const filteredHospitals = allHospitals.filter((hospital) =>
+    hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    hospital.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white">
       <AuthNavbar />
 
-      {/* Added pt-24 to ensure content starts below the Navbar */}
       <div className="max-w-7xl mx-auto p-4 pt-24">
-        {/* Animated Header */}
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -43,23 +56,37 @@ export default function HospitalPage() {
             </Button>
           </div>
 
-          {/* Search Bar with Animation */}
+          {/* ✅ Search Bar with Real-Time Filtering and Clear Icon */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
             <div className="relative">
+              {/* Search Icon */}
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-500" />
+
+              {/* Search Input */}
               <Input
                 placeholder="Search hospitals..."
-                className="pl-10 h-12 rounded-xl border-sky-100 focus:border-sky-500"
+                className="pl-10 pr-10 h-12 rounded-xl border-sky-100 focus:border-sky-500 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
+
+              {/* ✅ Clear Button (X icon) - Only appears when there is text */}
+              {searchQuery && (
+                <Button
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={() => setSearchQuery("")}
+                >
+                  <X size={18} />
+                </Button>
+              )}
             </div>
           </motion.div>
         </motion.header>
 
-        {/* Animated Content Transition */}
         <AnimatePresence mode="wait">
           <motion.div
             key={mapMode ? 'map' : 'list'}
@@ -69,12 +96,17 @@ export default function HospitalPage() {
             transition={{ duration: 0.3 }}
           >
             {mapMode ? (
-              <MapView hospitals={hospitals} />
+              // ✅ Pass filtered hospitals to MapView
+              <MapView hospitals={filteredHospitals} />
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {hospitals.map((hospital) => (
-                  <HospitalCard key={hospital.id} hospital={hospital} />
-                ))}
+                {filteredHospitals.length > 0 ? (
+                  filteredHospitals.map((hospital) => (
+                    <HospitalCard key={hospital.id} hospital={hospital} />
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500 col-span-full">No hospitals found.</p>
+                )}
               </div>
             )}
           </motion.div>

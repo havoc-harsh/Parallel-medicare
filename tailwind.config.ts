@@ -23,6 +23,10 @@ const config: Config = {
       }
     }
   },
+  corePlugins: {
+    // Restore original preflight
+    preflight: true,
+  },
   plugins: [],
 }
 
