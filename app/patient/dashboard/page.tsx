@@ -319,7 +319,7 @@ export default function PatientDashboard() {
           onClick={handleModalClick}
         >
           <div
-            className="bg-white rounded-lg py-6 max-w-lg w-full shadow-xl py-8 flex justify-center items-center"
+            className="bg-white rounded-lg  max-w-lg w-full shadow-xl py-8 flex justify-center items-center"
             onClick={handleModalContentClick}
           >
             <UserProfile 

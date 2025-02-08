@@ -7,6 +7,10 @@ import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import AuthNavbar from '@/components/AuthNavbar';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { setToken, setUser } from '@/app/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
+import { loginUser } from '@/app/lib/authActions';
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -18,9 +22,18 @@ export default function HospitalLoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
   });
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const onSubmit = (data: any) => {
     console.log('Hospital Login Data:', data);
+    try {
+      dispatch(loginUser(data));
+    } catch (error:any) {
+      console.log(error)
+    } finally{
+      router.push("/hospital")
+    }
   };
 
   return (

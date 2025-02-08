@@ -4,9 +4,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useAppSelector } from '@/app/redux/hooks';
 import { X, Menu, ChevronDown, Building2, User, ArrowRight } from 'lucide-react';
 
-export default function Navbar() {
+export default function HospitalNavbar() {
+    const user = useAppSelector(state=>state.auth.user)
   const [isOpen, setIsOpen] = useState(false);
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [showGetStartedOptions, setShowGetStartedOptions] = useState(false);
@@ -14,7 +16,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { name: 'Home', href: '/' },
+    { name: 'Home', href: user?'/hospital/dashboard':'/auth/register' },
     { 
       name: 'Features', 
       href: '#features',
@@ -231,6 +233,7 @@ export default function Navbar() {
                   ))}
                 </div>
               ))}
+              
             </div>
           </motion.div>
         )}

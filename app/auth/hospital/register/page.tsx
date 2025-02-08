@@ -7,13 +7,17 @@ import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import AuthNavbar from '@/components/AuthNavbar';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { signupUser } from '@/app/lib/authActions';
+import { useRouter } from 'next/navigation';
+import HospitalNavbar from '@/components/HospitalNavbar';
 
 const formSchema = z.object({
-  hospitalName: z.string().min(3),
+  name: z.string().min(3),
   address: z.string().min(10),
   contactPerson: z.string().min(3),
   email: z.string().email(),
-  phoneNumber: z.string().regex(/^\+(?:[0-9] ?){6,14}[0-9]$/),
+  phone: z.string().regex(/^\+(?:[0-9] ?){6,14}[0-9]$/),
   licenseNumber: z.string().min(5),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
@@ -22,18 +26,32 @@ const formSchema = z.object({
   path: ["confirmPassword"],
 });
 
+
+
 export default function HospitalRegistrationPage() {
+  
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
   });
 
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const onSubmit = (data: any) => {
     console.log('Hospital Registration Data:', data);
+    console.log(data);
+    try {
+      dispatch(signupUser(data))
+    } catch (error:any) {
+      console.log(error.message)
+    } finally{
+    router.push("/hospital")
+    }
   };
 
   return (
     <div className="min-h-screen">
-      <AuthNavbar />
+      <HospitalNavbar/>
 
       {/*
         Wrapper with:
@@ -69,7 +87,7 @@ export default function HospitalRegistrationPage() {
             <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center items-center px-8 order-2 lg:order-1">
               <div className="text-center mb-6 w-3/4">
                 <br />
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-gray-900 pt-8">
                   Hospital Registration
                 </h2>
                 <p className="text-gray-600 text-sm">
@@ -84,7 +102,7 @@ export default function HospitalRegistrationPage() {
                     Hospital Name
                   </label>
                   <input
-                    {...register('hospitalName')}
+                    {...register('name')}
                     type="text"
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     placeholder="General Hospital"
@@ -123,7 +141,7 @@ export default function HospitalRegistrationPage() {
                       Phone Number
                     </label>
                     <input
-                      {...register('phoneNumber')}
+                      {...register('phone')}
                       type="tel"
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="+1 234 567 890"

@@ -1,38 +1,56 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Patient {
-  id: string;
-  fullName: string;
-  email: string;
+import { createSlice } from "@reduxjs/toolkit";
+interface Hospital {
+  user: HospitalUser;
   token: string;
 }
 
-interface AuthState {
-  patient: Patient | null;
-  isAuthenticated: boolean;
-}
+type HospitalUser = {
+  name: string;
+  address: string;
+  contactPerson: string;
+  phone: string;
+  email: string;
+  licenseNumber: string;
+  password: string;
+};
 
-const initialState: AuthState = {
-  patient: null,
-  isAuthenticated: false,
+const initialState: Hospital = {
+  user: {
+    name: "",
+    address: "",
+    contactPerson: "",
+    phone: "",
+    email: "",
+    licenseNumber: "",
+    password: "",
+  },
+  token: "",
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state) => {
-      state.isAuthenticated = true;
+    setUser(state, action) {
+      state.user = action.payload;
     },
-    logout: (state) => {
-      state.patient = null;
-      state.isAuthenticated = false;
+    setToken(state, action) {
+      state.token = action.payload;
     },
-    signup : (state,action)=>{
-        state.patient = action.payload;
+    clearAuth(state) {
+      state.user = {
+        name: "",
+        address: "",
+        contactPerson: "",
+        phone: "",
+        email: "",
+        licenseNumber: "",
+        password: "",
+      };
+      state.token = "";
     },
   },
 });
 
-export const { login, logout , signup } = authSlice.actions;
-export const authReducer = authSlice.reducer;
+export const { setUser, setToken, clearAuth } = authSlice.actions;
+export default authSlice.reducer;
