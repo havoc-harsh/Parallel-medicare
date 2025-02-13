@@ -1,3 +1,4 @@
+// types/hospital.ts
 export interface Doctor {
   name: string;
   specialty: string;
@@ -12,12 +13,19 @@ export interface Hospital {
   rating: string;
   experience?: string;
   waitTime: string;
+  contact: string;
+  ambulances: number;
+  blood: number;
+  oxygen: number;
+  icu: number;
+  latitude: number;
+  longitude: number;
   specialities: string[];
   about?: string;
   nextAvailable?: string;
   verified?: boolean;
   amenities?: string[];
-  doctors: Doctor[]; // Updated to use the Doctor interface
+  doctors: Doctor[];
 }
 
 export interface BookingData {
