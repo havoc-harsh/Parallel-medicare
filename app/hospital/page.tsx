@@ -7,34 +7,29 @@ import HospitalCard from "@/components/hospital-card";
 import { Input } from "@/components/ui/input";
 import AuthNavbar from "@/components/AuthNavbar";
 import { Button } from "@/components/ui/button";
-
 import { Search, X, MapPin, List } from "lucide-react";
 import { hospitals as allHospitals } from "@/data/hospital";
 import Link from "next/link";
+
 // Dynamically import MapView with SSR disabled
-const MapView = dynamic(
-  () => import("@/components/map-view"),
-  { 
-    ssr: false,
-    loading: () => <div className="h-[calc(100vh-180px)] flex items-center justify-center">Loading map...</div>
-  }
-);
+const MapView = dynamic(() => import("@/components/map-view"), { 
+  ssr: false,
+  loading: () => <div className="h-[calc(100vh-180px)] flex items-center justify-center">Loading map...</div>
+});
 
 export default function HospitalPage() {
   const [mapMode, setMapMode] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // ✅ Added search state
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // ✅ Function to filter hospitals based on search query
+  // Filter hospitals based on search query
   const filteredHospitals = allHospitals.filter((hospital) =>
     hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hospital.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white">
       <AuthNavbar />
-
       <div className="max-w-7xl mx-auto p-4 pt-24">
         <motion.header
           initial={{ opacity: 0, y: -20 }}
@@ -64,25 +59,16 @@ export default function HospitalPage() {
             </div>
           </div>
 
-          {/* ✅ Search Bar with Real-Time Filtering and Clear Icon */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
+          {/* Search Bar */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             <div className="relative">
-              {/* Search Icon */}
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-500" />
-
-              {/* Search Input */}
               <Input
                 placeholder="Search hospitals..."
                 className="pl-10 pr-10 h-12 rounded-xl border-sky-100 focus:border-sky-500 w-full"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-
-              {/* ✅ Clear Button (X icon) - Only appears when there is text */}
               {searchQuery && (
                 <Button
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
@@ -91,20 +77,20 @@ export default function HospitalPage() {
                   <X size={18} />
                 </Button>
               )}
-
             </div>
+          </motion.div>
+        </motion.header>
 
-
+        {/* Fix JSX syntax */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={mapMode ? 'map' : 'list'}
+            key={mapMode ? "map" : "list"}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
             {mapMode ? (
-              // ✅ Pass filtered hospitals to MapView
               <MapView hospitals={filteredHospitals} />
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -115,35 +101,11 @@ export default function HospitalPage() {
                 ) : (
                   <p className="text-center text-gray-500 col-span-full">No hospitals found.</p>
                 )}
-
               </div>
-            </motion.div>
-          </motion.header>
-        )}
-
-        <AnimatePresence mode="wait">
-          {isClient && (
-            <motion.div
-              key={mapMode ? "map" : "list"}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {mapMode ? (
-                <MapView hospitals={hospitals} />
-              ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {hospitals.map((hospital) => (
-                    <HospitalCard key={hospital.id} hospital={hospital} />
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          )}
+            )}
+          </motion.div>
         </AnimatePresence>
       </div>
     </div>
   );
 }
-
