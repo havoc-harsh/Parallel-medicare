@@ -97,9 +97,9 @@ export default function PatientDashboard() {
     vaccinations: ["Flu Vaccine 2023", "COVID-19 Booster", "Tetanus"],
     lastCheckup: "March 15, 2024",
     favoriteDoctors: [
-      { name: "Dr. Alice Johnson", specialty: "Cardiologist" },
-      { name: "Dr. Brian Smith", specialty: "Dermatologist" },
-      { name: "Dr. Catherine Lee", specialty: "Endocrinologist" }
+      { name: "Dr. Amar Sharma", specialty: "Cardiologist" },
+      { name: "Dr. Birendra Singh", specialty: "Dermatologist" },
+      { name: "Dr. Aastha Singla", specialty: "Endocrinologist" }
     ],
   });
 
@@ -116,7 +116,7 @@ export default function PatientDashboard() {
               <User className="w-8 h-8 text-blue-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">Welcome, John Doe</h1>
+              <h1 className="text-3xl font-bold">Welcome, Harsh Ranjan</h1>
               <p className="text-gray-600">Your Personal Health Dashboard</p>
             </div>
           </div>

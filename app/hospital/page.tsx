@@ -9,7 +9,7 @@ import AuthNavbar from "@/components/AuthNavbar";
 import { Button } from "@/components/ui/button";
 import { Search, X, MapPin, List } from "lucide-react";
 import { hospitals as allHospitals } from "@/data/hospital";
-
+import Link from "next/link";
 // Dynamically import MapView with SSR disabled
 const MapView = dynamic(
   () => import("@/components/map-view"),
@@ -46,14 +46,20 @@ export default function HospitalPage() {
             >
               Find Premium Healthcare
             </motion.h1>
-            
-            <Button
-              onClick={() => setMapMode(!mapMode)}
-              className="flex items-center gap-2 border-sky-500 text-sky-600 hover:bg-sky-50"
-            >
-              {mapMode ? <List size={20} /> : <MapPin size={20} />}
-              {mapMode ? "List View" : "Map View"}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link href="/services">
+                <Button className="bg-emerald-600 text-white hover:bg-emerald-700">
+                  Emergency Services
+                </Button>
+              </Link>
+              <Button
+                onClick={() => setMapMode(!mapMode)}
+                className="flex items-center gap-2 border-sky-500 text-sky-600 hover:bg-sky-50"
+              >
+                {mapMode ? <List size={20} /> : <MapPin size={20} />}
+                {mapMode ? "List View" : "Map View"}
+              </Button>
+            </div>
           </div>
 
           {/* ✅ Search Bar with Real-Time Filtering and Clear Icon */}
