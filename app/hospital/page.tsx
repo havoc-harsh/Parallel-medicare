@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import HospitalCard from "@/components/hospital-card";
 import { Input } from "@/components/ui/input";
 import AuthNavbar from "@/components/AuthNavbar";
 import { Button } from "@/components/ui/button";
+
 import { Search, X, MapPin, List } from "lucide-react";
 import { hospitals as allHospitals } from "@/data/hospital";
 import Link from "next/link";
@@ -28,6 +29,7 @@ export default function HospitalPage() {
     hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hospital.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white">
@@ -89,9 +91,9 @@ export default function HospitalPage() {
                   <X size={18} />
                 </Button>
               )}
+
             </div>
-          </motion.div>
-        </motion.header>
+
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -113,11 +115,35 @@ export default function HospitalPage() {
                 ) : (
                   <p className="text-center text-gray-500 col-span-full">No hospitals found.</p>
                 )}
+
               </div>
-            )}
-          </motion.div>
+            </motion.div>
+          </motion.header>
+        )}
+
+        <AnimatePresence mode="wait">
+          {isClient && (
+            <motion.div
+              key={mapMode ? "map" : "list"}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {mapMode ? (
+                <MapView hospitals={hospitals} />
+              ) : (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {hospitals.map((hospital) => (
+                    <HospitalCard key={hospital.id} hospital={hospital} />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>
   );
 }
+
