@@ -14,7 +14,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { name: 'Home', href: '/' },
+    { name: 'Dashboard', href: '/patient/dashboard' },
     { 
       name: 'Features', 
       href: '#features',

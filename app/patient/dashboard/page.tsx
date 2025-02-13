@@ -115,15 +115,15 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
             {isServicesOpen && (
               <div className="space-y-1 pl-6">
                 {[
-                  { icon: AlertTriangle, label: "Emergency" },
-                  { icon: Ambulance, label: "Ambulances" },
-                  { icon: Shield, label: "Oxygen Cylinder" },
-                  { icon: Bed, label: "Available Beds" },
-                  { icon: Droplet, label: "Blood Bank" },
-                  { icon: BrainCircuit, label: "AI Assistance" },
-                ].map(({ icon: Icon, label }, idx) => (
+                  { icon: AlertTriangle, label: "Emergency" ,route:"/services"},
+                  { icon: Ambulance, label: "Ambulances" ,route:"/patient/dashboard/ambulances"},
+                  { icon: Shield, label: "Oxygen Cylinder" ,route:"/patient/dashboard/oxygen"},
+                  { icon: Bed, label: "Available Beds" ,route:"/patient/dashboard/beds"},
+                  { icon: Droplet, label: "Blood Bank" ,route:"/patient/dashboard/blood-bank"},
+                  { icon: BrainCircuit, label: "AI Assistance" ,route:"/patient/dashboard"},
+                ].map(({ icon: Icon, label , route}, idx) => (
+                  <Link href={route}>
                   <button
-                    key={idx}
                     className={`w-full flex items-center gap-3 p-2 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
                       isCollapsed ? "justify-center" : ""
                     }`}
@@ -131,7 +131,12 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
                     <Icon className="w-4 h-4 text-blue-600" />
                     {!isCollapsed && label}
                   </button>
-                ))}
+                  </Link>
+                ))
+                
+                
+                }
+
               </div>
             )}
           </div>
