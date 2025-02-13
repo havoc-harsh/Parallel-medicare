@@ -45,7 +45,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: { isCollapsed: boolean; toggleS
               {isServicesOpen && !isCollapsed && (
                               <div className="space-y-1 pl-6">
                 {[
-                  { icon: AlertTriangle, label: "services" ,route:"/services"},
+                  { icon: AlertTriangle, label: "Emergency" ,route:"/services"},
                   { icon: Ambulance, label: "Ambulances" ,route:"/patient/dashboard/ambulances"},
                   { icon: Shield, label: "Oxygen Cylinder" ,route:"/patient/dashboard/oxygen"},
                   { icon: Bed, label: "Available Beds" ,route:"/patient/dashboard/beds"},

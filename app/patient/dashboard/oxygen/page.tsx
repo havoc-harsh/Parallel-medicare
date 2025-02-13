@@ -75,7 +75,7 @@ export default function OxygenAvailabilityPage() {
       <div className="flex-1 flex flex-col">
         <div className="md:hidden flex justify-between items-center bg-gray-100 p-4 border-b">
           <h1 className="text-xl font-bold">Oxygen Availability Dashboard</h1>
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 bg-gray-200 rounded-md">
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 bg-gray-200 rounded-md" title="Toggle Mobile Menu">
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
         </div>
