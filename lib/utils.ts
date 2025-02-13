@@ -1,17 +1,5 @@
-import jwt from 'jsonwebtoken'
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-export const generateToken = (payload: object) => {
-  return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' })
-}
-
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, process.env.JWT_SECRET!)
-}
-
-
-
 
 /**
  * Merges class names using clsx and tailwind-merge
