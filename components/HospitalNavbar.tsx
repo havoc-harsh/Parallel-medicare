@@ -4,9 +4,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useAppSelector } from '@/app/redux/hooks';
 import { X, Menu, ChevronDown, Building2, User, ArrowRight } from 'lucide-react';
-import Image from "next/image";
-export default function Navbar() {
+
+export default function HospitalNavbar() {
+    const user = useAppSelector(state=>state.auth.user)
   const [isOpen, setIsOpen] = useState(false);
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [showGetStartedOptions, setShowGetStartedOptions] = useState(false);
@@ -14,7 +16,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { name: 'Home', href: '/' },
+    { name: 'Home', href: user?'/hospital/dashboard':'/auth/register' },
     { 
       name: 'Features', 
       href: '#features',
@@ -60,9 +62,12 @@ export default function Navbar() {
     >
       <div className="flex items-center justify-between h-16 lg:h-20">
         {/* Logo */}
-       {/* Logo */}
-       <Link href="/" className="flex items-center gap-2">
-          <Image src="/medicare-logo-final.svg" alt="Medicare+" width={50} height={50} className="rounded-full" />
+        <Link href="/" className="flex items-center gap-2">
+          <motion.div 
+            className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full shadow-lg"
+            whileHover={{ rotate: 15, scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          />
           <span className="text-xl font-bold text-gray-900 drop-shadow-md">
             Medicare+
           </span>
@@ -228,6 +233,7 @@ export default function Navbar() {
                   ))}
                 </div>
               ))}
+              
             </div>
           </motion.div>
         )}
