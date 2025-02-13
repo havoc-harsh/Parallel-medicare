@@ -205,7 +205,7 @@ export default function PatientDashboard() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-6 mb-8 ">
             
-              <img className="w-[4rem] h-[4rem] text-blue-600 rounded-full" src={user.user?.imageUrl} />
+              <img className="w-[4rem] h-[4rem] text-blue-600 rounded-full" src={user.user?.imageUrl} alt="User profile image" />
             
             <div>
 
