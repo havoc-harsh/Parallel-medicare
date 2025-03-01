@@ -1,5 +1,5 @@
 'use client';
-
+import AboutSection from '@/components/About';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
@@ -327,6 +327,7 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+    
     </div>
   );
 }
