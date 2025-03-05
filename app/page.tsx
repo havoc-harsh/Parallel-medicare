@@ -129,7 +129,7 @@ export default function LandingPage() {
                     transition={{ delay: 0.1 }}
                   >
                     <Link
-                      href="/auth/hospital/register"
+                      href="/hospital/dashboard"
                       className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
                     >
                       <Building2 className="w-6 h-6 text-blue-600" />

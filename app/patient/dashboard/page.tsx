@@ -29,12 +29,28 @@ import {
   Stethoscope,
 } from "lucide-react";
 
+/* --------------------------------------------------
+   Interfaces
+-------------------------------------------------- */
 interface SidebarProps {
   isCollapsed: boolean;
   toggleSidebar: () => void;
   onProfileClick: () => void;
 }
 
+interface MedicalProfile {
+  bloodType: string;
+  allergies: string[];
+  medications: string[];
+  conditions: string[];
+  vaccinations: string[];
+  lastCheckup: string;
+  favoriteDoctors: { name: string; specialty: string }[];
+}
+
+/* --------------------------------------------------
+   Sidebar Component
+-------------------------------------------------- */
 const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) => {
   const [isServicesOpen, setIsServicesOpen] = useState(true);
 
@@ -54,7 +70,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
 
       <nav className="p-4">
         <div className="space-y-2">
-          {/* Instead of linking to a separate route, clicking on the Profile button will open the modal */}
+          {/* Profile opens a modal */}
           <button
             onClick={onProfileClick}
             className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
@@ -65,7 +81,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
             {!isCollapsed && "Profile"}
           </button>
 
-          <Link href={`/patient/dashboard`}>
+          <Link href="/patient/dashboard">
             <button
               className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
                 isCollapsed ? "justify-center" : ""
@@ -85,7 +101,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
             {!isCollapsed && "Settings"}
           </button>
 
-          <Link href={'/hospital'}
+          <Link
+            href="/hospital"
             className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
               isCollapsed ? "justify-center" : ""
             }`}
@@ -115,32 +132,30 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
             {isServicesOpen && (
               <div className="space-y-1 pl-6">
                 {[
-                  { icon: AlertTriangle, label: "Emergency¸¸¸" ,route:"/services"},
-                  { icon: Ambulance, label: "Ambulances" ,route:"/patient/dashboard/ambulances"},
-                  { icon: Shield, label: "Oxygen Cylinder" ,route:"/patient/dashboard/oxygen"},
-                  { icon: Bed, label: "Available Beds" ,route:"/patient/dashboard/beds"},
-                  { icon: Droplet, label: "Blood Bank" ,route:"/patient/dashboard/blood-bank"},
-                  { icon: BrainCircuit, label: "AI Assistance" ,route:"/patient/dashboard"},
-                ].map(({ icon: Icon, label , route}, idx) => (
-                  <Link href={route}>
-                  <button
-                    className={`w-full flex items-center gap-3 p-2 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
-                      isCollapsed ? "justify-center" : ""
-                    }`}
-                  >
-                    <Icon className="w-4 h-4 text-blue-600" />
-                    {!isCollapsed && label}
-                  </button>
+                  { icon: AlertTriangle, label: "Emergency¸¸¸", route: "/services" },
+                  { icon: Ambulance, label: "Ambulances", route: "/patient/dashboard/ambulances" },
+                  { icon: Shield, label: "Oxygen Cylinder", route: "/patient/dashboard/oxygen" },
+                  { icon: Bed, label: "Available Beds", route: "/patient/dashboard/beds" },
+                  { icon: Droplet, label: "Blood Bank", route: "/patient/dashboard/blood-bank" },
+                  { icon: BrainCircuit, label: "AI Assistance", route: "/patient/dashboard" },
+                ].map(({ icon: Icon, label, route }, idx) => (
+                  <Link key={idx} href={route}>
+                    <button
+                      className={`w-full flex items-center gap-3 p-2 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
+                        isCollapsed ? "justify-center" : ""
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 text-blue-600" />
+                      {!isCollapsed && label}
+                    </button>
                   </Link>
-                ))
-                
-                
-                }
-
+                ))}
               </div>
             )}
           </div>
         </div>
+
+        {/* Sign Out Button */}
         <div
           className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-400/20 rounded-lg transition ${
             isCollapsed ? "justify-center" : ""
@@ -154,17 +169,12 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
   );
 };
 
-interface MedicalProfile {
-  bloodType: string;
-  allergies: string[];
-  medications: string[];
-  conditions: string[];
-  vaccinations: string[];
-  lastCheckup: string;
-  favoriteDoctors: { name: string; specialty: string }[];
-}
-
+/* --------------------------------------------------
+   Main Dashboard Page
+-------------------------------------------------- */
 export default function PatientDashboard() {
+  // Example medical profile data (hard-coded).
+  // If you want to dynamically fetch user data from a backend, do so here.
   const [medicalProfile] = useState<MedicalProfile>({
     bloodType: "O+",
     allergies: ["Penicillin", "Pollen", "Shellfish"],
@@ -173,23 +183,24 @@ export default function PatientDashboard() {
     vaccinations: ["Flu Vaccine 2023", "COVID-19 Booster", "Tetanus"],
     lastCheckup: "March 15, 2024",
     favoriteDoctors: [
-
       { name: "Dr. Amar Sharma", specialty: "Cardiologist" },
       { name: "Dr. Birendra Singh", specialty: "Dermatologist" },
-      { name: "Dr. Aastha Singla", specialty: "Endocrinologist" }
+      { name: "Dr. Aastha Singla", specialty: "Endocrinologist" },
     ],
   });
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  // Clerk user
   const user = useUser();
 
-  // Function to close the modal when clicking outside the modal content
+  // Close modal when clicking outside content
   const handleModalClick = () => {
     setIsProfileModalOpen(false);
   };
 
-  // Prevent modal content click from closing the modal
+  // Stop propagation so the modal content isn’t closed by its own click
   const handleModalContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -208,14 +219,17 @@ export default function PatientDashboard() {
         } pt-20 p-8`}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-6 mb-8 ">
-            
-              <img className="w-[4rem] h-[4rem] text-blue-600 rounded-full" src={user.user?.imageUrl} alt="User profile image" />
-            
+          <div className="flex items-center gap-6 mb-8">
+            {user.user?.imageUrl && (
+              <img
+                className="w-[4rem] h-[4rem] text-blue-600 rounded-full"
+                src={user.user.imageUrl}
+                alt="User profile"
+              />
+            )}
             <div>
-
               <h1 className="text-3xl font-bold">
-                Welcome, {user.user?.fullName}
+                Welcome, {user.user?.fullName ?? "User"}
               </h1>
               <p className="text-gray-600">Your Personal Health Dashboard</p>
             </div>
@@ -280,9 +294,9 @@ export default function PatientDashboard() {
                 hoverBg: "hover:bg-orange-100",
                 borderColor: "border-orange-500",
               },
-            ].map(({ title, value, icon: Icon, hoverBg, borderColor }, index) => (
+            ].map(({ title, value, icon: Icon, hoverBg, borderColor }, i) => (
               <div
-                key={index}
+                key={i}
                 className={`bg-white p-6 rounded-xl shadow-lg border-2 transition-all duration-300 ${hoverBg} ${borderColor} hover:shadow-lg`}
               >
                 <div className="flex items-center gap-4">
@@ -319,18 +333,17 @@ export default function PatientDashboard() {
         </div>
       </main>
 
-      {/* Modal for User Profile */}
+      {/* Modal for User Profile (from @clerk/nextjs) */}
       {isProfileModalOpen && (
         <div
-          className="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 backdrop-blur-sm  z-50 py-8"
+          className="fixed flex justify-center items-center inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 py-8"
           onClick={handleModalClick}
         >
           <div
-            className="bg-white rounded-lg  max-w-lg w-full shadow-xl py-8 flex justify-center items-center"
+            className="bg-white rounded-lg max-w-lg w-full shadow-xl py-8 flex justify-center items-center"
             onClick={handleModalContentClick}
           >
-            <UserProfile 
-            routing="hash"/>
+            <UserProfile routing="hash" />
           </div>
         </div>
       )}
