@@ -1,4 +1,6 @@
 // types/hospital.ts
+
+import { DefaultSession } from "next-auth";
 export interface Doctor {
   name: string;
   specialty: string;
@@ -34,4 +36,24 @@ export interface BookingData {
   name: string;
   phone: string;
   reason: string;
+}
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      licenseNumber: string;
+    } & DefaultSession["user"];
+    accessToken?: string; // Add accessToken to session
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    licenseNumber: string;
+    accessToken?: string; // Add accessToken to JWT
+  }
 }

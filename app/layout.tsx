@@ -5,6 +5,7 @@ import { ClerkProvider, SignIn } from "@clerk/nextjs";
 import StoreProvider from "./StoreProvider";
 import { dark, neobrutalism , shadesOfPurple } from '@clerk/themes'
 
+import ClientProvider from "./ClientProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,9 +37,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-                <StoreProvider>
-        {children}
-        </StoreProvider>
+                
+                <ClientProvider>{children}</ClientProvider>
+        
+        
       </body>
     </html>
     </ClerkProvider>

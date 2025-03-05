@@ -2,6 +2,7 @@
 
 import { useState, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Home,
   Settings,
@@ -15,7 +16,9 @@ import {
   Clock,
   CalendarClock,
   Bell,
+  LogOut
 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
 // Define interfaces for state data
 interface BedData {
@@ -139,6 +142,8 @@ const Sidebar = ({
     "beds" | "blood" | "oxygen" | "ambulance" | "settings" | null
   >(null);
 
+  const session = useSession();
+
   return (
     <div
       className={`bg-gradient-to-b from-gray-50 to-gray-100 border-r border-gray-200 h-screen fixed left-0 top-0 transition-all duration-300 ${
@@ -146,26 +151,18 @@ const Sidebar = ({
       }`}
     >
       <div className="p-4 border-b border-gray-200 flex items-center gap-3">
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-teal-500 rounded-full" />
+      <Image src="/medicare-logo-final.svg" alt="Medicare+" width={50} height={50} className="rounded-full" />
+        
         {!isCollapsed && (
           <span className="text-xl font-bold text-gray-900">
-            Hospital Admin
+            {session.data?.user.name
+        }
           </span>
         )}
       </div>
 
       <nav className="p-4">
         <div className="space-y-2">
-          <Link href="/hospital/dashboard">
-            <button
-              className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-100/50 rounded-xl transition ${
-                isCollapsed ? "justify-center" : ""
-              }`}
-            >
-              <Home className="w-5 h-5 text-blue-600" />
-              {!isCollapsed && "Dashboard"}
-            </button>
-          </Link>
 
           <button
             onClick={() => setActiveModal("settings")}
@@ -217,6 +214,18 @@ const Sidebar = ({
               <Ambulance className="w-5 h-5 text-purple-600" />
               {!isCollapsed && "Ambulance Details"}
             </button>
+
+            <button
+              onClick={() => signOut({ callbackUrl: "/auth/hospital/login" })}
+              className={`w-full flex items-center gap-3 p-3 text-gray-700 hover:bg-blue-100/50 rounded-xl transition ${
+                isCollapsed ? "justify-center" : ""
+              }`}
+            >
+              <LogOut className="w-5 h-5 text-red-600"/>
+              {!isCollapsed && "SignOut"}
+            </button>
+
+
           </div>
         </div>
       </nav>
