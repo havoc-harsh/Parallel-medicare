@@ -3,16 +3,16 @@ import AboutSection from '@/components/About';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-  Building2, 
-  User, 
-  ArrowRight, 
-  Bed, 
-  Stethoscope, 
-  Ambulance, 
-  HeartPulse, 
-  Check, 
-  Shield, 
+import {
+  Building2,
+  User,
+  ArrowRight,
+  Bed,
+  Stethoscope,
+  Ambulance,
+  HeartPulse,
+  Check,
+  Shield,
   Calendar,
   Activity,
   Clipboard
@@ -162,7 +162,7 @@ export default function LandingPage() {
       {/* Features Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-cyan-50">
         <div className="container mx-auto max-w-7xl">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -204,9 +204,12 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 <div className="flex items-center gap-2 font-medium">
-                  <span>Explore Dashboard</span>
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  <Link href="/auth/patient/login">
+                    <span>Explore Dashboard</span>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
+
               </div>
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-400/20 backdrop-blur-sm" />
             </motion.div>
@@ -245,17 +248,19 @@ export default function LandingPage() {
                   <div className="mb-6 p-3 w-fit rounded-lg bg-cyan-50 text-cyan-600">
                     <Stethoscope className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Telemedicine Suite</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Hospitals</h3>
                   <p className="text-gray-600 mb-6">
                     Virtual care platform with integrated diagnostics and prescription management
                   </p>
                 </div>
                 <div className="flex-1 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg p-6">
                   <div className="space-y-4">
+                  <Link href="/hospital">
                     <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-                      <h4 className="font-semibold mb-2">Video Consultations</h4>
-                      <p className="text-sm text-gray-600">Secure HD video conferencing</p>
+                      <h4 className="font-semibold mb-2">Book Appointment</h4>
+                      <p className="text-sm text-gray-600">Consult the doctor hastle free</p>
                     </div>
+                    </Link>
                     <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
                       <h4 className="font-semibold mb-2">AI Diagnostics</h4>
                       <p className="text-sm text-gray-600">Symptom analysis and triage</p>
@@ -264,31 +269,37 @@ export default function LandingPage() {
                 </div>
               </div>
             </motion.div>
-
+            <Link href="/services">
             <FeatureCard
               icon={<Ambulance className="w-8 h-8" />}
               title="Emergency Response"
               description="Integrated emergency dispatch system with live tracking"
               color="red"
             />
+            </Link>
+            
             <FeatureCard
               icon={<Check className="w-8 h-8" />}
               title="Advanced Analytics"
               description="Predictive modeling for resource optimization"
               color="blue"
             />
+             <Link href="/hospital">
             <FeatureCard
               icon={<Calendar className="w-8 h-8" />}
               title="Smart Scheduling"
-              description="AI-powered staff and resource allocation"
+              description="Schedule appointment by nearby providers"
               color="green"
             />
+            </Link>
+            <Link href="/auth/hospital/login">
             <FeatureCard
               icon={<HeartPulse className="w-8 h-8" />}
               title="Patient Monitoring"
               description="24/7 remote patient monitoring with real-time alerts"
               color="cyan"
             />
+            </Link>
           </div>
         </div>
       </section>
@@ -296,7 +307,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-cyan-50">
         <div className="container mx-auto text-center">
-          <motion.div 
+          <motion.div
             className="max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -327,17 +338,17 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
-    
+
     </div>
   );
 }
 
-const StatCard = ({ icon, value, label }: { 
+const StatCard = ({ icon, value, label }: {
   icon: React.ReactNode;
   value: string;
   label: string;
 }) => (
-  <motion.div 
+  <motion.div
     className="p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all"
     whileHover={{ y: -5 }}
   >
@@ -353,30 +364,30 @@ const StatCard = ({ icon, value, label }: {
   </motion.div>
 );
 
-const FeatureCard = ({ icon, title, description, color = 'blue' }: { 
+const FeatureCard = ({ icon, title, description, color = 'blue' }: {
   icon: React.ReactNode;
   title: string;
   description: string;
   color?: 'blue' | 'green' | 'red' | 'cyan';
 }) => {
   const colors = {
-    blue: { 
-      bg: 'bg-blue-50', 
+    blue: {
+      bg: 'bg-blue-50',
       text: 'text-blue-600',
       border: 'border-blue-200'
     },
-    green: { 
-      bg: 'bg-green-50', 
+    green: {
+      bg: 'bg-green-50',
       text: 'text-green-600',
       border: 'border-green-200'
     },
-    red: { 
-      bg: 'bg-red-50', 
+    red: {
+      bg: 'bg-red-50',
       text: 'text-red-600',
       border: 'border-red-200'
     },
-    cyan: { 
-      bg: 'bg-cyan-50', 
+    cyan: {
+      bg: 'bg-cyan-50',
       text: 'text-cyan-600',
       border: 'border-cyan-200'
     }
