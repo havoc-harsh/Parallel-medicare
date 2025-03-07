@@ -27,12 +27,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-    appearance={{
-      signIn:{baseTheme:dark},
-      signUp:{baseTheme:dark}
-    }}
-    >
           <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -43,6 +37,6 @@ export default function RootLayout({
         
       </body>
     </html>
-    </ClerkProvider>
+    
   );
 }

@@ -33,11 +33,12 @@ export default function HospitalLoginPage() {
   const onSubmit = async (data: FormData) => {
     console.log('Hospital Login Data:', data);
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
+      const result = await signIn("hospital-credentials", {
+        redirect: true,
         email: data.email,
         password: data.password,
         licenseNumber: data.licenseNumber,
+        
       });
 
       if (result?.ok) {

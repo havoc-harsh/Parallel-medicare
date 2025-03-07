@@ -10,7 +10,9 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+
     const data = registerSchema.parse(body);
+
 
     const existingUser = await prisma.hospital.findUnique({
       where: { email: data.email },
@@ -30,6 +32,8 @@ export async function POST(req: NextRequest) {
         email: data.email,
         licenseNumber: data.licenseNumber,
         password: hashedPassword,
+        longitude:data.longitude,
+        latitude:data.latitude
       },
     });
 

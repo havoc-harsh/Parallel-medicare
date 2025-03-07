@@ -6,48 +6,87 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import AuthNavbar from '@/components/AuthNavbar';
-import { useAppDispatch } from '@/app/redux/hooks';
-import { setUser, setToken, setError } from '@/app/redux/slices/authSlice'; // Import from your slice
-import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import HospitalNavbar from '@/components/HospitalNavbar';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { setUser, setToken, setError } from '@/app/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
 import { registerSchema } from '@/app/lib/schema';
 
 type FormData = z.infer<typeof registerSchema>;
 
 export default function HospitalRegistrationPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  // Geolocation and reverse geocoding effect
+  useEffect(() => {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+            // Reverse geocoding using OpenStreetMap Nominatim
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
+            );
+            if (!response.ok) throw new Error('Reverse geocoding failed');
+            const data = await response.json();
+            const address = data.display_name;
+            // Update form values
+            setValue('address', address);
+            setValue('latitude', latitude);
+            setValue('longitude', longitude);
+          } catch (error) {
+            console.error('Geocoding error:', error);
+            dispatch(setError('Could not determine your location'));
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          dispatch(setError('Please enable location access to autofill address'));
+        }
+      );
+    }
+  }, [setValue, dispatch]);
+
   const onSubmit = async (data: FormData) => {
     console.log('Hospital Registration Data:', data);
     try {
       // Call the signup API
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/auth/hospital/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
-
+  
+      // Parse the response only once
       const result = await response.json();
+  
+      // Check if the response is not OK
+      if (!response.ok) {
+        throw new Error(result.message || 'Registration failed');
+      }
+  
       console.log('Signup Response:', result);
-
-      router.push("/auth/hospital/login"); // Redirect on success
+  
+      // Redirect on success
+      router.push("/auth/hospital/login");
     } catch (error: any) {
       console.log('Signup Error:', error.message);
       dispatch(setError(error.message || "Failed to register hospital"));
     }
   };
-
+  
   return (
     <div className="min-h-screen">
       <HospitalNavbar />
@@ -58,10 +97,10 @@ export default function HospitalRegistrationPage() {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
             className="min-h-screen flex flex-col lg:flex-row"
           >
-            {/* Blue Section: Register Your Hospital (Info Panel) */}
+            {/* Blue Section: Info Panel */}
             <div className="w-full lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-500 flex flex-col justify-center items-center text-white px-8 order-1 lg:order-2">
               <motion.div className="text-center">
                 <div className="p-4 bg-white/20 rounded-lg inline-block">
@@ -75,7 +114,7 @@ export default function HospitalRegistrationPage() {
               </motion.div>
             </div>
 
-            {/* White Section: Hospital Registration Form */}
+            {/* White Section: Registration Form */}
             <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center items-center px-8 order-2 lg:order-1">
               <div className="text-center mb-6 w-3/4">
                 <br />
@@ -88,6 +127,10 @@ export default function HospitalRegistrationPage() {
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-3/4">
+                {/* Hidden fields for coordinates */}
+                <input type="hidden" {...register('latitude', { valueAsNumber: true })} />
+                <input type="hidden" {...register('longitude', { valueAsNumber: true })} />
+
                 {/* Hospital Name */}
                 <div>
                   <label className="block text-gray-700 text-sm mb-1">
@@ -239,7 +282,7 @@ export default function HospitalRegistrationPage() {
                     Hospital Login
                   </Link>
                 </p>
-                <br></br>
+                <br />
               </div>
             </div>
           </motion.div>

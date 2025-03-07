@@ -54,4 +54,3 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
