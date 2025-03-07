@@ -62,11 +62,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar, onProfileClick }: SidebarProps) =
     >
       {/* Logo & Name */}
       <div className="p-4 border-b border-gray-300 flex items-center gap-3">
-        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-teal-400 rounded-full" />
-        {!isCollapsed && (
-          <span className="text-xl font-bold text-gray-900">MediCare+</span>
-        )}
-      </div>
+  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-teal-400 rounded-full" />
+  {!isCollapsed && (
+    <Link href="/">
+      <span className="text-xl font-bold text-gray-900">MediCare+</span>
+    </Link>
+  )}
+</div>
 
       <nav className="p-4">
         <div className="space-y-2">

@@ -151,7 +151,9 @@ const Sidebar = ({
       }`}
     >
       <div className="p-4 border-b border-gray-200 flex items-center gap-3">
+        <Link href="/">
       <Image src="/medicare-logo-final.svg" alt="Medicare+" width={50} height={50} className="rounded-full" />
+      </Link>
         
         {!isCollapsed && (
           <span className="text-xl font-bold text-gray-900">
