@@ -7,10 +7,11 @@ import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import AuthNavbar from '@/components/AuthNavbar';
-import { useAppDispatch } from '@/app/redux/hooks';
-import { setToken, setUser } from '@/app/redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import { setToken, setUser, setError } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
-import { loginUser } from '@/app/lib/authActions';
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -18,23 +19,57 @@ const formSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 export default function HospitalLoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { error } = useAppSelector((state) => state.auth);
+  const { data: session, status } = useSession();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: FormData) => {
     console.log('Hospital Login Data:', data);
     try {
-      dispatch(loginUser(data));
-    } catch (error:any) {
-      console.log(error)
-    } finally{
-      router.push("/hospital")
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+        licenseNumber: data.licenseNumber,
+      });
+
+      if (result?.ok) {
+        // Wait for session to update before proceeding
+        // No immediate dispatch here; useEffect will handle it
+      } else {
+        dispatch(setError(result?.error || "Invalid credentials"));
+      }
+    } catch (error: any) {
+      console.log(error);
+      dispatch(setError(error.message || "Login failed"));
     }
   };
+
+  // Fetch token and user data from session after successful login
+  useEffect(() => {
+    if (status === "authenticated" && session) {
+      dispatch(setUser({
+        name: "",
+        address: "",
+        contactPerson: "",
+        phone: "",
+        email: session.user.email,
+        licenseNumber: session.user.licenseNumber || "",
+        password: "",
+      }));
+      dispatch(setToken(session.accessToken || "authenticated")); // Use token from session
+      console.log("Logged In Successfully");
+      dispatch(setError(null));
+      router.push(`/hospital/${session.user.id}/dashboard`); // Or session.user.licenseNumber
+    }
+  }, [status, session, dispatch, router]);
 
   return (
     <div className="min-h-screen">
@@ -67,7 +102,7 @@ export default function HospitalLoginPage() {
             {/* Right Side - White Background */}
             <div className="w-full lg:w-1/2 bg-white flex flex-col justify-center px-12">
               <div className="text-center mb-8">
-              <br></br>
+                <br></br>
                 <h2 className="text-3xl font-bold text-gray-900">Hospital Login</h2>
                 <p className="text-gray-600">
                   Sign in to access your hospital dashboard
@@ -128,6 +163,13 @@ export default function HospitalLoginPage() {
                     </p>
                   )}
                 </div>
+
+                {/* Error Display */}
+                {error && (
+                  <p className="text-red-500 text-sm text-center">
+                    {error}
+                  </p>
+                )}
 
                 {/* Submit Button */}
                 <motion.button

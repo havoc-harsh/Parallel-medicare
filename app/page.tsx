@@ -3,16 +3,16 @@ import AboutSection from '@/components/About';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-  Building2, 
-  User, 
-  ArrowRight, 
-  Bed, 
-  Stethoscope, 
-  Ambulance, 
-  HeartPulse, 
-  Check, 
-  Shield, 
+import {
+  Building2,
+  User,
+  ArrowRight,
+  Bed,
+  Stethoscope,
+  Ambulance,
+  HeartPulse,
+  Check,
+  Shield,
   Calendar,
   Activity,
   Clipboard
@@ -35,36 +35,21 @@ export default function LandingPage() {
   }, []);
 
   return (
-    // Added top padding for mobile (pt-16 = 64px) and removed on large screens (lg:pt-0)
     <div className="bg-white pt-20 lg:pt-0">
       <Navbar />
 
       {/* Hero Section */}
-      {/* 
-          For mobile devices, the hero section's height is set to 
-          calc(100vh - 64px) (64px being the mobile navbar height). 
-          On desktop, it uses the full screen height.
-      */}
       <section className="relative h-[calc(100vh-64px)] lg:h-screen flex items-center px-4 overflow-hidden">
         {/* Desktop Background: Video */}
         <div className="absolute inset-0 z-0 hidden lg:block">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source
-              src="https://cdn.pixabay.com/video/2022/09/08/130591-747868243_large.mp4"
-              type="video/mp4"
-            />
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+            <source src="https://cdn.pixabay.com/video/2022/09/08/130591-747868243_large.mp4" type="video/mp4" />
           </video>
         </div>
         {/* Mobile/Tablet Background: Light Blue Gradient */}
         <div className="absolute inset-0 z-0 lg:hidden bg-gradient-to-br from-blue-50 to-cyan-50"></div>
 
-        {/* Grid Container (ensuring full height) */}
+        {/* Grid Container */}
         <div className="container mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
           {/* Stats Cards Column */}
           <motion.div
@@ -74,7 +59,6 @@ export default function LandingPage() {
             transition={{ delay: 0.5 }}
           >
             <div className="grid grid-cols-1 gap-8">
-              {/* Available Beds (60% width) */}
               <div style={{ width: '60%' }} className="mx-auto">
                 <StatCard
                   icon={<Bed className="w-8 h-8 text-blue-600" />}
@@ -82,7 +66,6 @@ export default function LandingPage() {
                   label="Available Beds"
                 />
               </div>
-              {/* Medical Experts (70% width) */}
               <div style={{ width: '70%' }} className="mx-auto">
                 <StatCard
                   icon={<Stethoscope className="w-8 h-8 text-cyan-600" />}
@@ -90,7 +73,6 @@ export default function LandingPage() {
                   label="Medical Experts"
                 />
               </div>
-              {/* Active Ambulances (80% width) */}
               <div style={{ width: '80%' }} className="mx-auto">
                 <StatCard
                   icon={<Ambulance className="w-8 h-8 text-green-600" />}
@@ -103,7 +85,7 @@ export default function LandingPage() {
 
           {/* Main Content Column */}
           <motion.div
-            className="flex flex-col justify-center pr-10 order-1 lg:order-none  lg:col-start-3 lg:col-span-1 text-center lg:text-right"
+            className="flex flex-col justify-center pr-10 order-1 lg:order-none lg:col-start-3 lg:col-span-1 text-center lg:text-right"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -123,13 +105,9 @@ export default function LandingPage() {
                   transition={{ duration: 0.5 }}
                   className="flex flex-col md:flex-row gap-4"
                 >
-                  <motion.div
-                    initial={{ x: -20 }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
+                  <motion.div initial={{ x: -20 }} animate={{ x: 0 }} transition={{ delay: 0.1 }}>
                     <Link
-                      href="/auth/hospital/register"
+                      href="/hospital/dashboard"
                       className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
                     >
                       <Building2 className="w-6 h-6 text-blue-600" />
@@ -138,11 +116,7 @@ export default function LandingPage() {
                     </Link>
                   </motion.div>
 
-                  <motion.div
-                    initial={{ x: 20 }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
+                  <motion.div initial={{ x: 20 }} animate={{ x: 0 }} transition={{ delay: 0.2 }}>
                     <Link
                       href="/auth/patient/login"
                       className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
@@ -153,6 +127,23 @@ export default function LandingPage() {
                     </Link>
                   </motion.div>
                 </motion.div>
+
+                {/* New "Doctor Bera AI" Button, centered below the above buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mx-auto"
+                >
+                  <Link
+                    href="/drbera"
+                    className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
+                  >
+                    <Stethoscope className="w-6 h-6 text-green-600" />
+                    <span className="text-gray-900 font-medium">Doctor Bera AI</span>
+                    <ArrowRight className="w-5 h-5 ml-2 text-green-600" />
+                  </Link>
+                </motion.div>
               </div>
             </div>
           </motion.div>
@@ -162,7 +153,7 @@ export default function LandingPage() {
       {/* Features Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-cyan-50">
         <div className="container mx-auto max-w-7xl">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -204,8 +195,10 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 <div className="flex items-center gap-2 font-medium">
-                  <span>Explore Dashboard</span>
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  <Link href="/auth/patient/login">
+                    <span>Explore Dashboard</span>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-400/20 backdrop-blur-sm" />
@@ -245,17 +238,19 @@ export default function LandingPage() {
                   <div className="mb-6 p-3 w-fit rounded-lg bg-cyan-50 text-cyan-600">
                     <Stethoscope className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Telemedicine Suite</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Hospitals</h3>
                   <p className="text-gray-600 mb-6">
                     Virtual care platform with integrated diagnostics and prescription management
                   </p>
                 </div>
                 <div className="flex-1 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg p-6">
                   <div className="space-y-4">
-                    <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-                      <h4 className="font-semibold mb-2">Video Consultations</h4>
-                      <p className="text-sm text-gray-600">Secure HD video conferencing</p>
-                    </div>
+                    <Link href="/hospital">
+                      <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <h4 className="font-semibold mb-2">Book Appointment</h4>
+                        <p className="text-sm text-gray-600">Consult the doctor hastle free</p>
+                      </div>
+                    </Link>
                     <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
                       <h4 className="font-semibold mb-2">AI Diagnostics</h4>
                       <p className="text-sm text-gray-600">Symptom analysis and triage</p>
@@ -264,31 +259,37 @@ export default function LandingPage() {
                 </div>
               </div>
             </motion.div>
+            <Link href="/services">
+              <FeatureCard
+                icon={<Ambulance className="w-8 h-8" />}
+                title="Emergency Response"
+                description="Integrated emergency dispatch system with live tracking"
+                color="red"
+              />
+            </Link>
 
-            <FeatureCard
-              icon={<Ambulance className="w-8 h-8" />}
-              title="Emergency Response"
-              description="Integrated emergency dispatch system with live tracking"
-              color="red"
-            />
             <FeatureCard
               icon={<Check className="w-8 h-8" />}
               title="Advanced Analytics"
               description="Predictive modeling for resource optimization"
               color="blue"
             />
-            <FeatureCard
-              icon={<Calendar className="w-8 h-8" />}
-              title="Smart Scheduling"
-              description="AI-powered staff and resource allocation"
-              color="green"
-            />
-            <FeatureCard
-              icon={<HeartPulse className="w-8 h-8" />}
-              title="Patient Monitoring"
-              description="24/7 remote patient monitoring with real-time alerts"
-              color="cyan"
-            />
+            <Link href="/hospital">
+              <FeatureCard
+                icon={<Calendar className="w-8 h-8" />}
+                title="Smart Scheduling"
+                description="Schedule appointment by nearby providers"
+                color="green"
+              />
+            </Link>
+            <Link href="/auth/hospital/login">
+              <FeatureCard
+                icon={<HeartPulse className="w-8 h-8" />}
+                title="Patient Monitoring"
+                description="24/7 remote patient monitoring with real-time alerts"
+                color="cyan"
+              />
+            </Link>
           </div>
         </div>
       </section>
@@ -296,7 +297,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-50 to-cyan-50">
         <div className="container mx-auto text-center">
-          <motion.div 
+          <motion.div
             className="max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -327,17 +328,12 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
-    
     </div>
   );
 }
 
-const StatCard = ({ icon, value, label }: { 
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-}) => (
-  <motion.div 
+const StatCard = ({ icon, value, label }: { icon: React.ReactNode; value: string; label: string; }) => (
+  <motion.div
     className="p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all"
     whileHover={{ y: -5 }}
   >
@@ -353,33 +349,12 @@ const StatCard = ({ icon, value, label }: {
   </motion.div>
 );
 
-const FeatureCard = ({ icon, title, description, color = 'blue' }: { 
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  color?: 'blue' | 'green' | 'red' | 'cyan';
-}) => {
+const FeatureCard = ({ icon, title, description, color = 'blue' }: { icon: React.ReactNode; title: string; description: string; color?: 'blue' | 'green' | 'red' | 'cyan'; }) => {
   const colors = {
-    blue: { 
-      bg: 'bg-blue-50', 
-      text: 'text-blue-600',
-      border: 'border-blue-200'
-    },
-    green: { 
-      bg: 'bg-green-50', 
-      text: 'text-green-600',
-      border: 'border-green-200'
-    },
-    red: { 
-      bg: 'bg-red-50', 
-      text: 'text-red-600',
-      border: 'border-red-200'
-    },
-    cyan: { 
-      bg: 'bg-cyan-50', 
-      text: 'text-cyan-600',
-      border: 'border-cyan-200'
-    }
+    blue: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' },
+    green: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200' },
+    red: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200' },
+    cyan: { bg: 'bg-cyan-50', text: 'text-cyan-600', border: 'border-cyan-200' }
   };
 
   return (

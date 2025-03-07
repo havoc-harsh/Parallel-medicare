@@ -8,58 +8,50 @@ import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import AuthNavbar from '@/components/AuthNavbar';
 import { useAppDispatch } from '@/app/redux/hooks';
-import { signupUser } from '@/app/lib/authActions';
+import { setUser, setToken, setError } from '@/app/redux/slices/authSlice'; // Import from your slice
 import { useRouter } from 'next/navigation';
 import HospitalNavbar from '@/components/HospitalNavbar';
+import { registerSchema } from '@/app/lib/schema';
 
-const formSchema = z.object({
-  name: z.string().min(3),
-  address: z.string().min(10),
-  contactPerson: z.string().min(3),
-  email: z.string().email(),
-  phone: z.string().regex(/^\+(?:[0-9] ?){6,14}[0-9]$/),
-  licenseNumber: z.string().min(5),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-
+type FormData = z.infer<typeof registerSchema>;
 
 export default function HospitalRegistrationPage() {
-  
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(formSchema),
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(registerSchema),
   });
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: FormData) => {
     console.log('Hospital Registration Data:', data);
-    console.log(data);
     try {
-      dispatch(signupUser(data))
-    } catch (error:any) {
-      console.log(error.message)
-    } finally{
-    router.push("/hospital")
+      // Call the signup API
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
+      }
+
+      const result = await response.json();
+      console.log('Signup Response:', result);
+
+      router.push("/auth/hospital/login"); // Redirect on success
+    } catch (error: any) {
+      console.log('Signup Error:', error.message);
+      dispatch(setError(error.message || "Failed to register hospital"));
     }
   };
 
   return (
     <div className="min-h-screen">
-      <HospitalNavbar/>
+      <HospitalNavbar />
 
-      {/*
-        Wrapper with:
-        - Top padding (pt-24) so content isn’t covered by the navbar on mobile.
-        - Bottom padding (pb-24) to add extra blue space at the bottom.
-        - On large screens (lg:pt-0 lg:pb-0) the padding and blue background are removed.
-        - The blue gradient (bg-gradient-to-br from-blue-600 to-blue-500) is applied on mobile.
-      */}
       <div className="pt-24 pb-24 lg:pt-0 lg:pb-0 bg-gradient-to-br from-blue-600 to-blue-500 lg:bg-transparent">
         <AnimatePresence mode="wait">
           <motion.div
@@ -107,6 +99,9 @@ export default function HospitalRegistrationPage() {
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     placeholder="General Hospital"
                   />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+                  )}
                 </div>
 
                 {/* Address */}
@@ -120,6 +115,9 @@ export default function HospitalRegistrationPage() {
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     placeholder="123 Medical Street, Health City"
                   />
+                  {errors.address && (
+                    <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+                  )}
                 </div>
 
                 {/* Contact Person & Phone Number */}
@@ -134,6 +132,9 @@ export default function HospitalRegistrationPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="John Doe"
                     />
+                    {errors.contactPerson && (
+                      <p className="text-red-500 text-xs mt-1">{errors.contactPerson.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -146,6 +147,9 @@ export default function HospitalRegistrationPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="+1 234 567 890"
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -161,6 +165,9 @@ export default function HospitalRegistrationPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="admin@hospital.com"
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -173,6 +180,9 @@ export default function HospitalRegistrationPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="MED-123456"
                     />
+                    {errors.licenseNumber && (
+                      <p className="text-red-500 text-xs mt-1">{errors.licenseNumber.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -188,6 +198,9 @@ export default function HospitalRegistrationPage() {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                       placeholder="••••••••"
                     />
+                    {errors.password && (
+                      <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                    )}
                   </div>
 
                   <div>

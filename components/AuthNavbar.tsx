@@ -19,9 +19,9 @@ export default function Navbar() {
       name: 'Features', 
       href: '#features',
       subLinks: [
-        { name: 'Bed Tracking', href: '/features/beds' },
-        { name: 'Doctor Search', href: '/features/doctors' },
-        { name: 'Emergency Services', href: '/features/emergency' },
+        { name: 'Bed Tracking', href: '/services' },
+        { name: 'Doctor Search', href: '/services' },
+        { name: 'Emergency Services', href: '/services' },
       ]
     },
     { name: 'Hospitals', href: '/hospital' },
