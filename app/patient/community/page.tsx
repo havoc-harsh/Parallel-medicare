@@ -14,16 +14,27 @@ export default function CommunityPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [replyInputs, setReplyInputs] = useState<{ [key: string]: { name: string; message: string } }>({});
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    fetchRequests();
-  }, []);
+    fetchRequests(page);
+  }, [page]);
 
-  async function fetchRequests() {
-    const res = await fetch("/api/community");
-    const data = await res.json();
-    setRequests(data);
+  async function fetchRequests(pageNumber: number) {
+    const res = await fetch(`/api/community?page=${pageNumber}&limit=10`);
+    const data: Request[] = await res.json();
+  
+    setRequests((prev) => {
+      const existingIds = new Set(prev.map((req) => req.id)); // Track existing IDs
+      const uniqueNewRequests = data.filter((req) => !existingIds.has(req.id)); // Filter out duplicates
+      return pageNumber === 1 ? data : [...prev, ...uniqueNewRequests]; // Merge without duplicates
+    });
+  
+    setHasMore(data.length === 10); // Disable "Load More" if fewer than 10 items were fetched
   }
+  
 
   async function submitRequest() {
     if (!name || !description) return alert("Fill all fields!");
@@ -34,12 +45,14 @@ export default function CommunityPage() {
       body: JSON.stringify({ name, description }),
     });
 
-    fetchRequests();
+    setPage(1);
+    fetchRequests(1);
     setName("");
     setDescription("");
   }
 
-  async function submitReply(requestId: string, replyName: string, replyMessage: string) {
+  async function submitReply(requestId: string) {
+    const { name: replyName, message: replyMessage } = replyInputs[requestId] || {};
     if (!replyName || !replyMessage) return alert("Fill all fields!");
 
     await fetch("/api/community/reply", {
@@ -48,61 +61,84 @@ export default function CommunityPage() {
       body: JSON.stringify({ requestId, name: replyName, message: replyMessage }),
     });
 
-    fetchRequests();
+    fetchRequests(1);
+    setReplyInputs((prev) => ({ ...prev, [requestId]: { name: "", message: "" } }));
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Community Center</h1>
+    <div className="container mx-auto p-6 pt-[90px] bg-gradient-to-br from-blue-500 to-cyan-400 min-h-screen text-white">
+      <h1 className="text-4xl font-bold text-center mb-6">Community Center</h1>
 
       {/* Submit Request Form */}
-      <div className="bg-white p-4 shadow-md rounded-lg mb-6">
-        <h2 className="text-xl font-semibold mb-2">Submit a Help Request</h2>
+      <div className="bg-white p-6 shadow-lg rounded-lg mb-6 text-gray-900">
+        <h2 className="text-2xl font-semibold mb-4">Submit a Help Request</h2>
         <input
           type="text"
           placeholder="Your Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border p-2 w-full mb-2"
+          className="border p-3 w-full mb-3 rounded-lg"
         />
         <textarea
           placeholder="Describe your request"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="border p-2 w-full mb-2"
+          className="border p-3 w-full mb-3 rounded-lg"
         />
-        <button onClick={submitRequest} className="bg-blue-600 text-white px-4 py-2 rounded">
+        <button onClick={submitRequest} className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-lg w-full font-semibold">
           Submit
         </button>
       </div>
 
       {/* Display Requests */}
-      <h2 className="text-xl font-semibold mb-2">Help Requests</h2>
+      <h2 className="text-2xl font-semibold mb-4">Help Requests</h2>
       {requests.map((req) => (
-        <div key={req.id} className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
-          <strong>{req.name}</strong>
-          <p>{req.description}</p>
-          <div className="mt-2">
-            <input type="text" placeholder="Your Name" className="border p-1" id={`name-${req.id}`} />
-            <input type="text" placeholder="Your Message" className="border p-1 ml-2" id={`message-${req.id}`} />
+        <div key={req.id} className="bg-white p-5 rounded-lg shadow-lg mb-5 text-gray-900">
+          <strong className="text-lg text-blue-700">{req.name}</strong>
+          <p className="mb-3 text-gray-700">{req.description}</p>
+
+          {/* Reply Section */}
+          <div className="mt-3 flex flex-col sm:flex-row gap-2">
+            <input
+              type="text"
+              placeholder="Your Name"
+              value={replyInputs[req.id]?.name || ""}
+              onChange={(e) => setReplyInputs((prev) => ({ ...prev, [req.id]: { ...prev[req.id], name: e.target.value } }))}
+              className="border p-3 rounded-lg flex-1"
+            />
+            <input
+              type="text"
+              placeholder="Your Message"
+              value={replyInputs[req.id]?.message || ""}
+              onChange={(e) => setReplyInputs((prev) => ({ ...prev, [req.id]: { ...prev[req.id], message: e.target.value } }))}
+              className="border p-3 rounded-lg flex-2"
+            />
             <button
-              onClick={() => {
-                const replyName = (document.getElementById(`name-${req.id}`) as HTMLInputElement).value;
-                const replyMessage = (document.getElementById(`message-${req.id}`) as HTMLInputElement).value;
-                submitReply(req.id, replyName, replyMessage);
-              }}
-              className="bg-green-500 text-white px-2 py-1 ml-2 rounded"
+              onClick={() => submitReply(req.id)}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold"
             >
               Reply
             </button>
           </div>
+
+          {/* Display Replies */}
           {req.replies?.map((reply, idx) => (
-            <p key={idx} className="ml-4 text-gray-700">
-              <strong>{reply.name}:</strong> {reply.message}
+            <p key={idx} className="ml-4 text-gray-700 mt-2">
+              <strong className="text-green-600">{reply.name}:</strong> {reply.message}
             </p>
           ))}
         </div>
       ))}
+
+      {/* Pagination */}
+      {hasMore && (
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="bg-gray-700 hover:bg-gray-800 text-white px-5 py-3 rounded-lg w-full mt-6 font-semibold"
+        >
+          Load More
+        </button>
+      )}
     </div>
   );
 }
