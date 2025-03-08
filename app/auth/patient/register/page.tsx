@@ -62,12 +62,14 @@ export default function PatientSignupPage() {
             email: data.email,
             password: data.password,
           });
+          console.log(signInResult)
           if (!signInResult?.ok) {
             dispatch(setError(signInResult?.error || 'Login failed after registration'));
           }
           router.push("/patient/dashboard");
         } else {
-          dispatch(setError(result.error || 'Registration failed'));
+          const errorData = await response.json(); // Parse error message
+  dispatch(setError(errorData.error || 'Registration failed.'));
         }
       } else {
         dispatch(setError('Registration failed. Please try again.'));
@@ -198,8 +200,8 @@ export default function PatientSignupPage() {
                 </div>
 
                 {/* Error Display */}
-                {error && (
-                  <p className="text-red-500 text-sm text-center">{error}</p>
+                {error &&(
+                  <p className="text-blue-500 text-sm text-center">Signup Successful! Please Log In</p>
                 )}
 
                 {/* Submit Button */}

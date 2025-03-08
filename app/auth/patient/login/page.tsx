@@ -149,7 +149,7 @@ export default function PatientLoginPage() {
                   )}
                 </div>
 
-                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                {error && <p className="text-red-500 text-sm text-center"></p>}
 
                 <button
                   type="submit"
