@@ -5,8 +5,8 @@ import { prisma } from '@/app/lib/prisma';
 import { authOptions } from '@/app/api/auth/options';
 
 export async function GET(
-  request: NextRequest,
-  context: { params: { hospitalId: string } }
+  request: Request,
+  { params }: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -15,7 +15,7 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     
-    const hospitalId = Number(context.params.hospitalId);
+    const hospitalId = Number(params.hospitalId);
     
     const oxygen = await prisma.oxygen.findUnique({
       where: { hospitalId },
@@ -45,8 +45,8 @@ export async function GET(
 }
 
 export async function PUT(
-  request: NextRequest,
-  context: { params: { hospitalId: string } }
+  request: Request,
+  { params }: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -55,7 +55,7 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     
-    const hospitalId = Number(context.params.hospitalId);
+    const hospitalId = Number(params.hospitalId);
     const body = await request.json();
     console.log('Received oxygen update data:', body);
     
