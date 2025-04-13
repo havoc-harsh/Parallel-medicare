@@ -43,9 +43,11 @@ export default function MedicalProfileForm() {
     }
   };
 
-
-
-
+  const removeItem = (array: string[], setArray: React.Dispatch<React.SetStateAction<string[]>>, index: number) => {
+    const newArray = [...array];
+    newArray.splice(index, 1);
+    setArray(newArray);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -87,8 +89,15 @@ export default function MedicalProfileForm() {
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {allergies.map((allergy, index) => (
-                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm">
+                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm flex items-center">
                   {allergy}
+                  <button 
+                    type="button"
+                    onClick={() => removeItem(allergies, setAllergies, index)}
+                    className="ml-1 text-gray-500 hover:text-red-500 focus:outline-none"
+                  >
+                    ×
+                  </button>
                 </span>
               ))}
             </div>
@@ -110,8 +119,15 @@ export default function MedicalProfileForm() {
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {medications.map((med, index) => (
-                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm">
+                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm flex items-center">
                   {med}
+                  <button 
+                    type="button"
+                    onClick={() => removeItem(medications, setMedications, index)}
+                    className="ml-1 text-gray-500 hover:text-red-500 focus:outline-none"
+                  >
+                    ×
+                  </button>
                 </span>
               ))}
             </div>
@@ -133,8 +149,15 @@ export default function MedicalProfileForm() {
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {conditions.map((condition, index) => (
-                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm">
+                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm flex items-center">
                   {condition}
+                  <button 
+                    type="button"
+                    onClick={() => removeItem(conditions, setConditions, index)}
+                    className="ml-1 text-gray-500 hover:text-red-500 focus:outline-none"
+                  >
+                    ×
+                  </button>
                 </span>
               ))}
             </div>
@@ -156,8 +179,15 @@ export default function MedicalProfileForm() {
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {vaccinations.map((vaccine, index) => (
-                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm">
+                <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm flex items-center">
                   {vaccine}
+                  <button 
+                    type="button"
+                    onClick={() => removeItem(vaccinations, setVaccinations, index)}
+                    className="ml-1 text-gray-500 hover:text-red-500 focus:outline-none"
+                  >
+                    ×
+                  </button>
                 </span>
               ))}
             </div>
