@@ -1,9 +1,13 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
 
+interface Params {
+  hospitalId: string;
+}
+
 export async function GET(
-  request: Request, 
-  { params }: { params: { hospitalId: string } }
+  req: Request, 
+  { params }: { params: Params }
 ) {
   try {
     const hospitalId = parseInt(params.hospitalId);
@@ -23,8 +27,8 @@ export async function GET(
 }
 
 export async function POST(
-  request: Request, 
-  { params }: { params: { hospitalId: string } }
+  req: Request, 
+  { params }: { params: Params }
 ) {
   try {
     const hospitalId = parseInt(params.hospitalId);
@@ -32,7 +36,7 @@ export async function POST(
       return NextResponse.json({ error: 'Invalid hospitalId' }, { status: 400 });
     }
 
-    const data = await request.json();
+    const data = await req.json();
     if (!data.name || !data.specialization) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -58,8 +62,8 @@ export async function POST(
 
 // PUT (Update Doctor)
 export async function PUT(
-  request: Request, 
-  { params }: { params: { hospitalId: string } }
+  req: Request, 
+  { params }: { params: Params }
 ) {
   try {
     const hospitalId = parseInt(params.hospitalId);
@@ -67,7 +71,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Invalid hospitalId' }, { status: 400 });
     }
 
-    const data = await request.json();
+    const data = await req.json();
     const id = parseInt(data.id);
     if (isNaN(id)) {
       return NextResponse.json({ error: 'Invalid doctor id' }, { status: 400 });
@@ -90,8 +94,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request, 
-  { params }: { params: { hospitalId: string } }
+  req: Request, 
+  { params }: { params: Params }
 ) {
   try {
     const hospitalId = parseInt(params.hospitalId);
@@ -99,7 +103,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Invalid hospitalId' }, { status: 400 });
     }
 
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(req.url);
     const id = parseInt(searchParams.get('id') || '');
     if (isNaN(id)) {
       return NextResponse.json({ error: 'Invalid doctor id' }, { status: 400 });

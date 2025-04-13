@@ -1,12 +1,16 @@
 // app/api/hospital/[hospitalId]/oxygen/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/app/lib/prisma';
 import { authOptions } from '@/app/api/auth/options';
 
+interface Params {
+  hospitalId: string;
+}
+
 export async function GET(
-  request: Request,
-  { params }: { params: { hospitalId: string } }
+  req: Request,
+  { params }: { params: Params }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -45,8 +49,8 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { hospitalId: string } }
+  req: Request,
+  { params }: { params: Params }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -56,7 +60,7 @@ export async function PUT(
     }
     
     const hospitalId = Number(params.hospitalId);
-    const body = await request.json();
+    const body = await req.json();
     console.log('Received oxygen update data:', body);
     
     // Handle various possible property names
