@@ -56,7 +56,7 @@ export default function ChatPage() {
       const formData = new FormData();
       formData.append('msg', inputMessage);
 
-      const response = await axios.post('http://localhost:8080/get', formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BERA_API_URL}/get`, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
