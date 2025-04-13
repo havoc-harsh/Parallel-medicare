@@ -1,9 +1,5 @@
 
 
-# IMPORTANT Please Note 
-
-#
-
 # 🏥 MediCare
 
 MediCare is a modern healthcare management system designed to streamline medical appointments, patient records, and doctor consultations. This platform bridges the gap between patients and healthcare providers through an intuitive and secure interface.
