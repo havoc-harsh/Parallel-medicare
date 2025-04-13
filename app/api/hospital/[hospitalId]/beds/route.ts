@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth';
 import { prisma } from '@/app/lib/prisma';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/options';
 
 export async function GET(
   request: NextRequest, 
-  { params }: { params: { hospitalId: string } }
+  context: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,7 +14,7 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const hospitalId = Number(params.hospitalId);
+    const hospitalId = Number(context.params.hospitalId);
     
     const bed = await prisma.bed.findUnique({
       where: { hospitalId },
@@ -41,7 +41,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest, 
-  { params }: { params: { hospitalId: string } }
+  context: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -50,7 +50,7 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const hospitalId = Number(params.hospitalId);
+    const hospitalId = Number(context.params.hospitalId);
     const body = await request.json();
     const { ICU, General, Emergency, Maternity, Pediatric } = body;
 
