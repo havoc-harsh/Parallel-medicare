@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { db } from "@/lib/firebaseadmin";
 
@@ -11,12 +10,18 @@ export async function POST(req: Request) {
     }
 
     const requestRef = db.collection("requests").doc(requestId);
+    const docSnapshot = await requestRef.get();
+    
+    // Handle undefined data safely
+    const currentReplies = docSnapshot.exists ? (docSnapshot.data()?.replies || []) : [];
+    
     await requestRef.update({
-      replies: [...(await requestRef.get()).data()?.replies || [], { name, message }]
+      replies: [...currentReplies, { name, message }]
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("Reply error:", error);
     return NextResponse.json({ error: "Failed to submit reply" }, { status: 500 });
   }
 }
