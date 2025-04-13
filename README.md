@@ -1,7 +1,7 @@
 
 
 # IMPORTANT Please Note 
-# In this version some features are static . For updated version please visit : https://github.com/havoc-harsh/NIRVANA_NITH
+
 #
 
 # 🏥 MediCare
