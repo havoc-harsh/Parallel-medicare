@@ -13,13 +13,9 @@ function transformAmbulance(ambulance: any) {
   };
 }
 
-interface Params {
-  hospitalId: string;
-}
-
 export async function GET(
-  req: Request,
-  { params }: { params: Params }
+  request: Request,
+  { params }: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -52,8 +48,8 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
-  { params }: { params: Params }
+  request: Request,
+  { params }: { params: { hospitalId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -62,7 +58,7 @@ export async function PUT(
     }
     
     const hospitalId = Number(params.hospitalId);
-    const body = await req.json();
+    const body = await request.json();
     
     // Support various input formats for ambulance fields
     const total = body.Total ?? body.total ?? 0;
