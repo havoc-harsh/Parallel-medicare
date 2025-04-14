@@ -311,14 +311,14 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link
-                href="/register-hospital"
+                href="/auth/hospital/login"
                 className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 justify-center"
               >
                 <Building2 className="w-5 h-5" />
                 Register Hospital
               </Link>
               <Link
-                href="/patient-login"
+                href="/auth/patient/login"
                 className="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold border-2 border-gray-200 hover:border-blue-200 hover:shadow-md transition-all flex items-center gap-2 justify-center"
               >
                 <User className="w-5 h-5" />
