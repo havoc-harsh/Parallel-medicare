@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import HospitalNavbar from '@/components/HospiNAV';
+
 import { useAppDispatch } from '@/app/redux/hooks';
 import { setUser, setToken, setError } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
@@ -89,7 +89,7 @@ export default function HospitalRegistrationPage() {
   
   return (
     <div className="min-h-screen">
-      <HospitalNavbar />
+      
 
       <div className="pt-24 pb-24 lg:pt-0 lg:pb-0 bg-gradient-to-br from-blue-600 to-blue-500 lg:bg-transparent">
         <AnimatePresence mode="wait">
