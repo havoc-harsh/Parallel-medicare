@@ -14,7 +14,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const links = [
-    { name: 'Dashboard', href: '/auth/patient/login' },
+   
     { 
       name: 'Features', 
       href: '#features',
@@ -25,8 +25,8 @@ export default function Navbar() {
       ]
     },
     { name: 'Hospitals', href: '/hospital' },
-    { name: 'About', href: '/hospital' },
-    { name: 'Contact', href: '/hospital' },
+    { name: 'About', href: '/patient/dashboard' },
+    { name: 'Contact', href: '/patient/dashboard' },
   ];
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between h-16 lg:h-20">
         {/* Logo */}
        {/* Logo */}
-       <div  className="flex items-center gap-2">
+       <div className="flex items-center gap-2">
           <Image src="/medicare-logo-final.svg" alt="Medicare+" width={50} height={50} className="rounded-full" />
           <span className="text-xl font-bold text-gray-900 drop-shadow-md">
             Medicare+

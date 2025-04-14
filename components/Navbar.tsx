@@ -18,14 +18,14 @@ export default function Navbar() {
       name: 'Features', 
       href: '#features',
       subLinks: [
-        { name: 'Bed Tracking', href: '/features/beds' },
-        { name: 'Doctor Search', href: '/features/doctors' },
-        { name: 'Emergency Services', href: '/features/emergency' },
+        { name: 'HealthCare Providers', href: '/hospital' },
+        { name: 'AI Chatbot', href: '/drbera' },
+        { name: 'Emergency Services', href: '/services' },
       ]
     },
     { name: 'Hospitals', href: '/hospital' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'About', href: '/hospital' },
+    { name: 'Contact', href: '/hospital' },
   ];
 
   useEffect(() => {

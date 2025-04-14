@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import HospitalNavbar from '@/components/HospitalNavbar';
+import HospitalNavbar from '@/components/HospiNAV';
 import { useAppDispatch } from '@/app/redux/hooks';
 import { setUser, setToken, setError } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
