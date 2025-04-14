@@ -101,7 +101,7 @@ export default function ChatPage() {
                   Doctor Bera AI
                 </h1>
                 <p className="text-sm text-white/90">
-                  Advanced Medical Diagnostics System
+                  Because of free backend deployment, the service may be slow at times.
                 </p>
               </div>
             </div>
