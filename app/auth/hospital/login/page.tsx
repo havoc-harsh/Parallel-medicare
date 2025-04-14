@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import AuthNavbar from '@/components/AuthNavbar';
+
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { setToken, setUser, setError } from '@/app/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
@@ -74,7 +74,7 @@ export default function HospitalLoginPage() {
 
   return (
     <div className="min-h-screen">
-      <AuthNavbar />
+      
 
       {/* Wrapper with top padding and blue background on mobile */}
       <div className="pt-24 lg:pt-0 bg-gradient-to-br from-blue-600 to-blue-500 lg:bg-transparent">

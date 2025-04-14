@@ -11,7 +11,7 @@ import { setToken, setUser, setError } from "@/app/redux/slices/userSlice";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-
+import AuthNavbar from '@/components/AuthNavbar';
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -93,6 +93,7 @@ export default function PatientLoginPage() {
 
   return (
     <div className="min-h-screen">
+      <AuthNavbar />
       <div className="pt-24 lg:pt-0 bg-gradient-to-br from-blue-600 to-blue-500 lg:bg-transparent">
         <AnimatePresence mode="wait">
           <motion.div
