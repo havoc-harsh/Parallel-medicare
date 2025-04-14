@@ -53,7 +53,7 @@ export default function LandingPage() {
         <div className="container mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
           {/* Stats Cards Column */}
           <motion.div
-            className="flex flex-col justify-center order-2 lg:order-none lg:col-span-1"
+            className="hidden lg:flex flex-col justify-center order-2 lg:order-none lg:col-span-1"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
@@ -85,7 +85,7 @@ export default function LandingPage() {
 
           {/* Main Content Column */}
           <motion.div
-            className="flex flex-col justify-center pr-10 order-1 lg:order-none lg:col-start-3 lg:col-span-1 text-center lg:text-right"
+            className="flex flex-col justify-center order-1 lg:order-none lg:col-start-3 lg:col-span-1 text-center lg:text-right"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -107,11 +107,11 @@ export default function LandingPage() {
                 >
                   <motion.div initial={{ x: -20 }} animate={{ x: 0 }} transition={{ delay: 0.1 }}>
                     <Link
-                      href="/auth/hospital/register"
+                      href="/hospital"
                       className="flex items-center gap-3 px-6 py-4 bg-white border-2 border-blue-100 rounded-xl hover:border-blue-200 hover:shadow-lg transition-all"
                     >
                       <Building2 className="w-6 h-6 text-blue-600" />
-                      <span className="text-gray-900 font-medium">Register Hospital</span>
+                      <span className="text-gray-900 font-medium">Explore Hospitals</span>
                       <ArrowRight className="w-5 h-5 ml-2 text-blue-600" />
                     </Link>
                   </motion.div>
