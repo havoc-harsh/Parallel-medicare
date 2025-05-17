@@ -15,13 +15,16 @@ import {
   Shield,
   Calendar,
   Activity,
-  Clipboard
+  Clipboard,
+  AlertTriangle,
+  X
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 
 export default function LandingPage() {
   const [showOptions, setShowOptions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showAlert, setShowAlert] = useState(true);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -36,6 +39,25 @@ export default function LandingPage() {
 
   return (
     <div className="bg-white pt-20 lg:pt-0">
+      {showAlert && (
+        <div className="fixed top-0 left-0 right-0 z-[70] bg-amber-100 border-b border-amber-200 py-2 px-4 text-center">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-amber-800">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+              <p className="text-sm font-medium">
+                This website is currently in prototype phase. You may encounter bugs, glitches, and performance issues. A production-ready version is under development.
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowAlert(false)}
+              className="p-1 hover:bg-amber-200 rounded-full transition-colors"
+              aria-label="Close alert"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
       <Navbar />
 
       {/* Hero Section */}

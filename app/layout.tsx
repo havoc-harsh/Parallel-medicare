@@ -4,7 +4,7 @@ import "./globals.css";
 import { ClerkProvider, SignIn } from "@clerk/nextjs";
 import StoreProvider from "./StoreProvider";
 import { dark, neobrutalism , shadesOfPurple } from '@clerk/themes'
-import { AlertTriangle } from "lucide-react";
+
 
 import ClientProvider from "./ClientProvider";
 const geistSans = Geist({
@@ -32,14 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="bg-amber-100 border-b border-amber-200 py-2 px-4 text-center">
-          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-amber-800">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
-            <p className="text-sm font-medium">
-              This website is currently in prototype phase. You may encounter bugs, glitches, and performance issues. A production-ready version is under development.
-            </p>
-          </div>
-        </div>
+        
         <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
